@@ -1,0 +1,85 @@
+server:
+  port: 8010
+  context-path: /wechatdemo
+
+spring:
+  application:
+    name: columbia
+  datasource:
+    url: jdbc:mysql://172.0.0.1:3306/aircube
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    host: 172.0.0.1
+    port: 6379
+    auth: xxxxxxxxxx
+    timeout: 3600
+    password:
+    expire: 0
+    database: 0
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      database: mogodemo
+  pool:
+    max-active: 8 # 连接池最大连接数（使用负值表示没有限制）
+    max-idle: 8 # 连接池中的最大空闲连接
+    max-wait: -1 # 连接池最大阻塞等待时间（使用负值表示没有限制）
+    min-idle: 0 # 连接池中的最小空闲连接
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://172.0.0.1:8761/eureka/  #注册发现服务中心
+
+
+mybatis:
+  mapper-locations:
+    - classpath:mapper/*Mapper.xml
+  type-aliases-package: com.senthink.www.domain.po
+
+
+senthink:
+  logging:
+    logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+      enabled: true
+      host: 127.0.0.1
+      port: 5000
+      queueSize: 512
+    smtp:    # Forward logs to mail, used by LoggingConfiguration
+      enabled: true
+      host: smtp.xxxxxxx.com
+      port: 25
+      username: xxx@xxxxxxx.com
+      password: xxxxxxx
+      to: xxxx@xxxxx.com
+      from: xxxx@xxxxx.com
+      ssl: false
+      asynchronousSending: true
+  async:
+    corePoolSize: 2
+    maxPoolSize: 50
+    queueCapacity: 10000
+
+
+wechat:
+  config:
+    appid: wx11111111111
+    appsecret: 11111111111119dcf0547af5443d
+    token: xxxxxxxxxx
+    wechatId: gh_111111111111
+    loadXMLConfigDelay: 600000
+    loadXMLConfigPeriod: 60000
+    catchFlash: 1800000
+  bluetoothCfg:
+    connectProtocol: 3
+    authKey:
+    closeStrategy: 1
+    connStrategy: 1
+    cryptMethod: 0
+    authVer: 0
+    manuMacPos: -1
+    serMacPos: -2
+    bleSimpleProtocol:

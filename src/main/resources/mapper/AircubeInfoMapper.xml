@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senthink.www.dao.IAircubeInfoMapper">
+
+	<!-- 通用查询结果列-->
+	<resultMap id="AircubeInfoResultMap" type="com.senthink.www.domain.po.AircubeInfo">
+ 		<result column="id" property="id" />
+ 		<result column="`name`" property="name" />
+ 		<result column="news_open" property="newsOpen" />
+ 		<result column="scene" property="scene" />
+ 		<result column="create_time" property="createTime" />
+ 		<result column="update_time" property="updateTime" />
+ 		<result column="mac" property="mac" />
+ 		<result column="device_id" property="deviceId" />
+ 		<result column="qrticket" property="qrticket" />
+ 		<result column="product_id" property="productId" />
+ 		<result column="devicelicence" property="devicelicence" />
+ 		<result column="status" property="status" />
+ 		<result column="dvc_base_id" property="dvcBaseId" />
+ 		<result column="back_time" property="backTime" />
+	</resultMap>
+	
+	<select id="getOpenIdBydvcId" resultType="java.lang.String">
+	SELECT
+		openid
+	FROM
+		aircube_user au,
+		aircube_adress ad
+	WHERE
+		au.id = ad.user_id  and ad.air_id=(SELECT
+			id
+		FROM
+			aircube_info
+		WHERE
+			device_id =  '${dvcId}'
+		AND `status` = 2) and ad.state="1"
+	
+	</select>
+	
+	<select id="getAirIdByDeviceId" resultType="Integer">
+	select id from aircube_info where 
+	
+	device_id =  '${dvcId}'
+	
+	</select>
+	
+	<select id="getAirByUserId" resultMap="AircubeInfoResultMap">
+	SELECT * from aircube_info where id in (SELECT air_id from aircube_adress where user_id=#{userId} and state ="1")
+	</select>
+
+	<update id = "updateByDeviceId">
+		update aircube_info set scene =  '${scene}'  ,
+					name = '${name}'   ,
+					news_open = '${newsOpen}'
+		where device_id = '${deviceId}'
+	</update>
+</mapper>

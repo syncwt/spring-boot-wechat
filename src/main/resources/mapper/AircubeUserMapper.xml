@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senthink.www.dao.IAircubeUserMapper">
+
+    <!-- 通用查询结果列-->
+    <resultMap id="AircubeUserResultMap" type="com.senthink.www.domain.po.AircubeUser">
+        <id column="id" property="id"/>
+        <result column="openid" property="openid"/>
+        <result column="nickname" property="nickname"/>
+        <result column="sex" property="sex"/>
+        <result column="head_img_url" property="headImgUrl"/>
+        <result column="gmt_regist" property="gmtRegist"/>
+        <result column="city" property="city"/>
+        <result column="country" property="country"/>
+        <result column="province" property="province"/>
+        <result column="gmt_subscribe" property="gmtSubscribe"/>
+        <result column="is_subscribe" property="isSubscribe"/>
+        <result column="dvc_num" property="dvcNum"/>
+    </resultMap>
+
+    <select id="selectUserInfoByOpenid" resultMap="AircubeUserResultMap">
+        SELECT * FROM aircube_user WHERE
+        <if test="@Ognl@isNotEmpty(openid)">
+            openid = '${openid}'
+        </if>
+    </select>
+
+    <select id="getUserIdByOpenId" resultType="Integer">
+    select id from aircube_user where openid = #{openid}
+    </select>
+
+    <select id="selectDvcNums" resultType="Integer">
+        SELECT count(*) FROM aircube_info WHERE id =
+          (SELECT air_id FROM aircube_adress WHERE user_id =
+            (SELECT id FROM aircube_user WHERE openid = #{openid})
+          GROUP BY air_id ) AND status >= 2;
+    </select>
+
+    <select id="findUserDvcList" resultType="String">
+        SELECT device_id from aircube_info WHERE status >= 2 AND id =
+          (SELECT air_id FROM aircube_adress WHERE user_id =
+            (SELECT id from aircube_user WHERE openid = #{openid}))
+    </select>
+
+    <insert id="saveUserInfo">
+		INSERT INTO aircube_user(openid,nickname,sex,head_img_url,gmt_regist,city,country,province,gmt_subscribe,is_subscribe)
+		VALUES (#{openid},to_base64(#{nickname}),#{sex},#{headimgurl},#{gmt_regist},#{city},#{country},#{province},#{gmt_subscribe},#{subscribe})
+	</insert>
+
+    <update id="updateUserInfo">
+		UPDATE aircube_user SET nickname = to_base64(#{nickname}),head_img_url = #{headimgurl},sex = #{sex},city = #{city},
+		country = #{country},province = #{province},gmt_subscribe = #{gmt_subscribe},is_subscribe = #{subscribe}
+		WHERE openid = #{openid}
+	</update>
+
+    <update id="updateUserSubsuribe">
+		UPDATE aircube_user SET is_subscribe = #{is_subscribe} WHERE openid = #{openid}
+	</update>
+
+
+</mapper>
