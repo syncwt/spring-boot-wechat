@@ -47,3 +47,6 @@ the project is based on spring boot,contain with wechat utils。
 
 # How to use
  Start the project with RUN class `DemoApplication`.To test your interface on http://127.0.0.1:8010/wechatdemo/...
+
+# Contact
+ Welcome to visit my blog at [syncwt](http://www.jianshu.com/u/7a8e041a132c)
